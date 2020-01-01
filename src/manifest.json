@@ -13,12 +13,6 @@
             "strict_min_version": "55.0"
         }
     },
-    "background": {
-        "scripts": [
-            "browser-polyfill.min.js",
-            "background.js"
-        ]
-    },
     "content_scripts": [
         {
             "matches": [
@@ -26,7 +20,9 @@
             ],
             "css": [],
             "js": [
-                "browser-polyfill.min.js"
+                "browser-polyfill.min.js",
+                "messages.js",
+                "content-script.js"
             ],
             "run_at": "document_idle"
         }
