@@ -10,21 +10,15 @@ function initialize()
 
 async function onClickA()
 {
-    sender.sendToTab(
-        await getCurrentTabID(),
-        "a"
-    )
+    sendToCurrentTab("a");
 }
 
 async function onClickB()
 {
-    sender.sendToTab(
-        await getCurrentTabID(),
-        "b"
-    )
+    sendToCurrentTab("b");
 }
 
-async function getCurrentTabID()
+async function sendToCurrentTab(message)
 {
     let matchedTabs = await browser.tabs.query(
         {
@@ -32,5 +26,7 @@ async function getCurrentTabID()
             currentWindow: true
         }
     );
-    return matchedTabs[0].id;
+    let tabID = matchedTabs[0].id;
+
+    sender.sendToTab(tabID, message);
 }
