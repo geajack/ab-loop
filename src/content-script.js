@@ -6,8 +6,10 @@ class ABLooper
         this.a = null;
         this.b = null;
         this.looping = false;
+        this.justLooped = false;
 
         this.videoElement.addEventListener("timeupdate", this.onTick.bind(this));
+        video.addEventListener("seeking", this.onSeek.bind(this));
     }
 
     placeA()
@@ -26,6 +28,7 @@ class ABLooper
         this.a = null;
         this.b = null;
         this.looping = false;
+        this.justLooped = false;
     }
 
     onTick(event)
@@ -34,17 +37,24 @@ class ABLooper
         {
             if (this.videoElement.currentTime >= this.b)
             {
+                this.justLooped = true;
                 this.videoElement.currentTime = this.a;
             }
         }
+    }
+
+    onSeek(event)
+    {
+        if (!this.justLooped)
+        {
+            this.clear();
+        }
+        this.justLooped = false;
     }
 }
 
 const video = document.querySelector("video");
 const looper = new ABLooper(video);
-
-video.addEventListener("seeking", event => looper.clear());
-video.addEventListener("seeked", event => looper.clear());
 
 const background = new MessageSender("Background");
 
