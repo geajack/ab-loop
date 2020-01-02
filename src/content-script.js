@@ -21,6 +21,13 @@ class ABLooper
         this.looping = true;
     }
 
+    clear()
+    {
+        this.a = null;
+        this.b = null;
+        this.looping = false;
+    }
+
     onTick(event)
     {
         if (this.looping)
@@ -36,6 +43,11 @@ class ABLooper
 const video = document.querySelector("video");
 const looper = new ABLooper(video);
 
+video.addEventListener("seeking", event => looper.clear());
+video.addEventListener("seeked", event => looper.clear());
+
+const background = new MessageSender("Background");
+
 const slot = new MessageSlot(
     "Page",
     function(message)
@@ -44,10 +56,17 @@ const slot = new MessageSlot(
         {
             case "a":
                 looper.placeA();
+                background.sendToRuntime("set-a");
             break;
 
             case "b":
                 looper.placeB();
+                background.sendToRuntime("set-b");
+            break;
+
+            case "clear":
+                looper.clear();
+                background.sendToRuntime("clear");
             break;
         }
     }

@@ -2,20 +2,45 @@ initialize();
 
 const sender = new MessageSender("Page");
 
+const slot = new MessageSlot("Background", onMessage)
+
 function initialize()
 {
     document.getElementById("button-A").addEventListener("click", onClickA);
     document.getElementById("button-B").addEventListener("click", onClickB);
+    document.getElementById("button-clear").addEventListener("click", onClickClear);
 }
 
-async function onClickA()
+function onMessage(message)
+{
+    switch (message)
+    {
+        case "set-a":
+            document.getElementById("button-B").disabled = false;
+        break;
+
+        case "set-b":
+        break;
+
+        case "clear":
+            document.getElementById("button-B").disabled = true;
+        break;
+    }
+}
+
+function onClickA()
 {
     sendToCurrentTab("a");
 }
 
-async function onClickB()
+function onClickB()
 {
     sendToCurrentTab("b");
+}
+
+function onClickClear()
+{
+    sendToCurrentTab("clear");
 }
 
 async function sendToCurrentTab(message)

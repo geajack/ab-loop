@@ -22,8 +22,17 @@ button {
 
 #button-B {
     background-color: cyan;
+    margin-right: 0px;
 }
 
-button:last-of-type {
-    margin-right: 0px;
+#button-clear {
+    display: block;
+    width: 100%;
+    height: 40px;
+    margin-top: 5px;
+}
+
+button[disabled] {
+    background-color: #EEE !important;
+    border: none;
 }
