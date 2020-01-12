@@ -51,33 +51,47 @@ class ABLooper
         }
         this.justLooped = false;
     }
+
+    getState()
+    {
+        return {
+            a: this.a,
+            b: this.b
+        }
+    }
 }
 
 const video = document.querySelector("video");
 const looper = new ABLooper(video);
 
-const background = new MessageSender("Background");
+const stateSender = new MessageSender("PopupStateSlot");
 
-const slot = new MessageSlot(
-    "Page",
+const pageInputSlot = new MessageSlot(
+    "PageInputSlot",
     function(message)
     {
         switch (message)
         {
             case "a":
                 looper.placeA();
-                background.sendToRuntime("set-a");
             break;
 
             case "b":
                 looper.placeB();
-                background.sendToRuntime("set-b");
             break;
 
             case "clear":
                 looper.clear();
-                background.sendToRuntime("clear");
             break;
         }
+        stateSender.sendToRuntime(looper.getState());
     }
 );
+
+const pageStateSlot = new MessageSlot(
+    "PageStateSlot",
+    function()
+    {
+        stateSender.sendToRuntime(looper.getState());
+    }
+)

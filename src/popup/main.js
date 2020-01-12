@@ -1,49 +1,11 @@
 initialize();
 
-const sender = new MessageSender("Page");
-
-const slot = new MessageSlot("Background", onMessage)
-
-function initialize()
+function render(state)
 {
-    document.getElementById("button-A").addEventListener("click", onClickA);
-    document.getElementById("button-B").addEventListener("click", onClickB);
-    document.getElementById("button-clear").addEventListener("click", onClickClear);
+    console.log(state);
 }
 
-function onMessage(message)
-{
-    switch (message)
-    {
-        case "set-a":
-            document.getElementById("button-B").disabled = false;
-        break;
-
-        case "set-b":
-        break;
-
-        case "clear":
-            document.getElementById("button-B").disabled = true;
-        break;
-    }
-}
-
-function onClickA()
-{
-    sendToCurrentTab("a");
-}
-
-function onClickB()
-{
-    sendToCurrentTab("b");
-}
-
-function onClickClear()
-{
-    sendToCurrentTab("clear");
-}
-
-async function sendToCurrentTab(message)
+async function initialize()
 {
     let matchedTabs = await browser.tabs.query(
         {
@@ -51,7 +13,32 @@ async function sendToCurrentTab(message)
             currentWindow: true
         }
     );
-    let tabID = matchedTabs[0].id;
+    const tabID = matchedTabs[0].id;
 
-    sender.sendToTab(tabID, message);
+    const inputSender = new MessageSender("PageInputSlot");
+
+    document.getElementById("button-A").addEventListener(
+        "click",
+        () => inputSender.sendToTab(tabID, "a")
+    );
+    document.getElementById("button-B").addEventListener(
+        "click",
+        () => inputSender.sendToTab(tabID, "b")
+    );
+    document.getElementById("button-clear").addEventListener(
+        "click",
+        () => inputSender.sendToTab(tabID, "clear")
+    );
+
+    const slot = new MessageSlot("PopupStateSlot",
+        function (state, sender)
+        {
+            if (sender.tab.id === tabID)
+            {
+                render(state);
+            }
+        }
+    );
+    
+    new MessageSender("PageStateSlot").sendToTab(tabID);
 }
