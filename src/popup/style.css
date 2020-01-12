@@ -16,16 +16,16 @@ button {
     border-color: rgba(0, 0, 0, 0.2)
 }
 
-#button-A {
+.button-A {
     background-color: orange;
 }
 
-#button-B {
+.button-B {
     background-color: cyan;
     margin-right: 0px;
 }
 
-#button-clear {
+.button-clear {
     display: block;
     width: 100%;
     height: 40px;

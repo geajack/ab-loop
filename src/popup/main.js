@@ -1,9 +1,44 @@
-initialize();
+import { instantiate } from "./viewbind/index.js"
 
-function render(state)
+class Controller
 {
-    console.log(state);
+    initialize(element)
+    {
+        this.inputSender = null;
+        this.aButton.classList.add("button-A");
+        this.bButton.classList.add("button-B");
+        this.clearButton.classList.add("button-clear");
+    }
+
+    setTabID(tabID)
+    {
+        this.tabID = tabID;
+        this.inputSender = new MessageSender("PageInputSlot");
+    }
+
+    onClickA()
+    {
+        this.inputSender.sendToTab(this.tabID, "a");
+    }
+
+    onClickB()
+    {
+        this.inputSender.sendToTab(this.tabID, "b");
+    }
+
+    onClickClear()
+    {
+        this.inputSender.sendToTab(this.tabID, "clear");
+    }
+
+    render(state)
+    {
+        this.aButton.textContent = state.a || "A";
+        this.bButton.textContent = state.b || "B";
+    }
 }
+
+initialize();
 
 async function initialize()
 {
@@ -15,27 +50,15 @@ async function initialize()
     );
     const tabID = matchedTabs[0].id;
 
-    const inputSender = new MessageSender("PageInputSlot");
-
-    document.getElementById("button-A").addEventListener(
-        "click",
-        () => inputSender.sendToTab(tabID, "a")
-    );
-    document.getElementById("button-B").addEventListener(
-        "click",
-        () => inputSender.sendToTab(tabID, "b")
-    );
-    document.getElementById("button-clear").addEventListener(
-        "click",
-        () => inputSender.sendToTab(tabID, "clear")
-    );
+    const controller = instantiate(document.querySelector("#main"), Controller);
+    controller.setTabID(tabID);
 
     const slot = new MessageSlot("PopupStateSlot",
         function (state, sender)
         {
             if (sender.tab.id === tabID)
             {
-                render(state);
+                controller.render(state);
             }
         }
     );

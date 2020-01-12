@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>A-B Loop Popup</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="main.js" defer></script>
+    <script src="main.js" defer type="module"></script>
     <script src="../browser-polyfill.min.js"></script>
     <script src="../messages.js"></script>
 </head>
 <body>
-    <div>
-        <button id="button-A">A</button>
-        <button id="button-B" disabled>B</button>
-        <button id="button-clear">Clear</button>
+    <div id="main">
+        <button bind="aButton" click="onClickA">A</button>
+        <button bind="bButton" click="onClickB" disabled>B</button>
+        <button bind="clearButton" click="onClickClear">Clear</button>
     </div>
 </body>
 </html>
