@@ -88,7 +88,15 @@ class ABLooper
 }
 
 const video = document.querySelector("video");
-const looper = new ABLooper(video);
+let looper = new ABLooper(video);
+
+const observer = new MutationObserver(onMutation);
+observer.observe(
+    video,
+    {
+        attributes: true, childList: false, subtree: false
+    }
+);
 
 const stateSender = new MessageSender("PopupStateSlot");
 
@@ -133,3 +141,16 @@ const pageStateSlot = new MessageSlot(
         stateSender.sendToRuntime(looper.getState());
     }
 )
+
+function onMutation(mutations)
+{
+    for (let mutation of mutations)
+    {
+        if (mutation.attributeName === "src")
+        {
+            looper.clear();
+            looper = new ABLooper(video);
+            stateSender.sendToRuntime(looper.getState());
+        }
+    }
+}
