@@ -32,6 +32,12 @@ button {
     margin-top: 5px;
 }
 
+.time {
+    font-size: 0.5em;
+    display: block;
+    text-align: center;
+}
+
 button[disabled] {
     background-color: #EEE !important;
     border: none;

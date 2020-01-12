@@ -1,4 +1,4 @@
-export function instantiate(element, controllerClass)
+export function instantiate(element, controllerClass, ...childClasses)
 {
     let controller = new controllerClass();
 
@@ -11,10 +11,20 @@ export function instantiate(element, controllerClass)
     for (let target of element.querySelectorAll("[bind]"))
     {
         let name = target.getAttribute("bind");
-        let childControllerClass = target.getAttribute("controller");
-        if (childControllerClass)
+        let childControllerClassName = target.getAttribute("controller");
+        if (childControllerClassName)
         {
-            controller[name] = instantiate(target, eval(childControllerClass));
+            let childControllerClass;
+            for (let childClass of childClasses)
+            {
+                if (childClass.name === childControllerClassName)
+                {
+                    childControllerClass = childClass;
+                    break;
+                }
+            }
+
+            controller[name] = instantiate(target, childControllerClass);
         }
         else
         {

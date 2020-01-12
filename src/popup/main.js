@@ -5,8 +5,8 @@ class Controller
     initialize(element)
     {
         this.inputSender = null;
-        this.aButton.classList.add("button-A");
-        this.bButton.classList.add("button-B");
+        this.aButton.element.classList.add("button-A");
+        this.bButton.element.classList.add("button-B");
         this.clearButton.classList.add("button-clear");
     }
 
@@ -33,23 +33,63 @@ class Controller
 
     render(state)
     {
-        let aLabel = "A";
-        let bLabel = "B";
-        this.bButton.disabled = true;
-
         if (state.a !== null)
         {
-            aLabel = state.a;
-            this.bButton.disabled = false;
+            this.aButton.setTime(state.a);
+            this.bButton.enable();
+        }
+        else
+        {
+            this.aButton.clearTime();
+            this.bButton.disable();
         }
 
         if (state.b !== null)
         {
-            bLabel = state.b;
+            this.bButton.setTime(state.b);
         }
+        else
+        {
+            this.bButton.clearTime();
+        }
+    }
+}
 
-        this.aButton.textContent = aLabel;
-        this.bButton.textContent = bLabel;
+class LoopButton
+{
+    initialize(element)
+    {
+        this.element = element;
+        this.time.classList.add("time");
+    }
+
+    enable()
+    {
+        this.element.disabled = false;
+    }
+
+    disable()
+    {
+        this.element.disabled = true;
+    }
+
+    setTime(time)
+    {
+        let remainder = time;
+        let hours = Math.floor(remainder / 3600);
+        remainder = time - hours * 3600;
+        let minutes = Math.floor(remainder / 60);
+        remainder = time - minutes * 60;
+        let seconds = remainder;
+
+        let secondsTruncated = seconds.toFixed(2);
+
+        this.time.textContent = `${hours}:${minutes}:${secondsTruncated}`;
+    }
+
+    clearTime()
+    {
+        this.time.textContent = "";
     }
 }
 
@@ -65,7 +105,7 @@ async function initialize()
     );
     const tabID = matchedTabs[0].id;
 
-    const controller = instantiate(document.querySelector("#main"), Controller);
+    const controller = instantiate(document.querySelector("#main"), Controller, LoopButton);
     controller.setTabID(tabID);
 
     const slot = new MessageSlot("PopupStateSlot",

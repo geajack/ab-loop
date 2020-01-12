@@ -12,8 +12,14 @@
 </head>
 <body>
     <div id="main">
-        <button bind="aButton" click="onClickA">A</button>
-        <button bind="bButton" click="onClickB" disabled>B</button>
+        <button bind="aButton" click="onClickA" controller="LoopButton">
+            A
+            <span bind="time"></span>
+        </button>
+        <button bind="bButton" click="onClickB" controller="LoopButton" disabled>
+            B
+            <span bind="time"></span>
+        </button>
         <button bind="clearButton" click="onClickClear">Clear</button>
     </div>
 </body>
