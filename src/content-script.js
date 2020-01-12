@@ -9,7 +9,7 @@ class ABLooper
         this.justLooped = false;
 
         this.videoElement.addEventListener("timeupdate", this.onTick.bind(this));
-        video.addEventListener("seeking", this.onSeek.bind(this));
+        this.videoElement.addEventListener("seeking", this.onSeek.bind(this));
     }
 
     placeA()
