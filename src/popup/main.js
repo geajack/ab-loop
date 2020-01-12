@@ -18,17 +18,37 @@ class Controller
 
     onClickA()
     {
-        this.inputSender.sendToTab(this.tabID, "a");
+        this.inputSender.sendToTab(this.tabID, { command: "set-a" });
     }
 
     onClickB()
     {
-        this.inputSender.sendToTab(this.tabID, "b");
+        this.inputSender.sendToTab(this.tabID, { command: "set-b" });
     }
 
     onClickClear()
     {
-        this.inputSender.sendToTab(this.tabID, "clear");
+        this.inputSender.sendToTab(this.tabID, { command: "clear" });
+    }
+
+    onAdjustStartLeft()
+    {
+        this.inputSender.sendToTab(this.tabID, { command: "adjust", endpoint: "a", direction: -1 });
+    }
+
+    onAdjustStartRight()
+    {
+        this.inputSender.sendToTab(this.tabID, { command: "adjust", endpoint: "a", direction: 1 });
+    }
+
+    onAdjustEndLeft()
+    {
+        this.inputSender.sendToTab(this.tabID, { command: "adjust", endpoint: "b", direction: -1 });
+    }
+
+    onAdjustEndRight()
+    {
+        this.inputSender.sendToTab(this.tabID, { command: "adjust", endpoint: "b", direction: 1 });
     }
 
     render(state)

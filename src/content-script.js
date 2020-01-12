@@ -23,6 +23,32 @@ class ABLooper
         this.looping = true;
     }
 
+    adjustA(delta)
+    {
+        if (this.a !== null)
+        {
+            this.a += delta;
+        }
+
+        if (this.b !== null && this.a > this.b)
+        {
+            this.a = this.b;
+        }
+    }
+
+    adjustB(delta)
+    {
+        if (this.b !== null)
+        {
+            this.b += delta;
+        }
+
+        if (this.a !== null && this.b < this.a)
+        {
+            this.b = this.a;
+        }
+    }
+
     clear()
     {
         this.a = null;
@@ -70,18 +96,30 @@ const pageInputSlot = new MessageSlot(
     "PageInputSlot",
     function(message)
     {
-        switch (message)
+        switch (message.command)
         {
-            case "a":
+            case "set-a":
                 looper.placeA();
             break;
 
-            case "b":
+            case "set-b":
                 looper.placeB();
             break;
 
             case "clear":
                 looper.clear();
+            break;
+
+            case "adjust":
+                let delta = message.direction * 0.1;
+                if (message.endpoint === "a")
+                {
+                    looper.adjustA(delta);
+                }
+                else if (message.endpoint === "b")
+                {
+                    looper.adjustB(delta);
+                }
             break;
         }
         stateSender.sendToRuntime(looper.getState());
