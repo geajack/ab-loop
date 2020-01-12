@@ -13,7 +13,9 @@ button {
 
     border-radius: 5px;
     border-width: 5px;
-    border-color: rgba(0, 0, 0, 0.2)
+    border-color: rgba(0, 0, 0, 0.2);
+
+    vertical-align: top;
 }
 
 .button-A {
@@ -34,6 +36,7 @@ button {
 
 .time {
     font-size: 0.5em;
+    height: 0.5em;
     display: block;
     text-align: center;
 }
