@@ -33,8 +33,23 @@ class Controller
 
     render(state)
     {
-        this.aButton.textContent = state.a || "A";
-        this.bButton.textContent = state.b || "B";
+        let aLabel = "A";
+        let bLabel = "B";
+        this.bButton.disabled = true;
+
+        if (state.a !== null)
+        {
+            aLabel = state.a;
+            this.bButton.disabled = false;
+        }
+
+        if (state.b !== null)
+        {
+            bLabel = state.b;
+        }
+
+        this.aButton.textContent = aLabel;
+        this.bButton.textContent = bLabel;
     }
 }
 
