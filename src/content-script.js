@@ -59,7 +59,7 @@ function onMutation(mutations)
 
 function bindToVideo(video)
 {
-    let looper = new ABLooper(video);
+    looper = new ABLooper(video);
     
     let observer = new MutationObserver(onMutation);
     observer.observe(
@@ -68,13 +68,55 @@ function bindToVideo(video)
             attributes: true, childList: false, subtree: false
         }
     );
-
-    return looper;
 }
 
-let looper;
-let video = document.querySelector("video");
-if (video !== null)
+class VideoDetector
 {
-    looper = bindToVideo(video);
+    constructor(callback)
+    {
+        this.video = null;
+        this.onDetectVideo = callback;
+        this.mutationObserver = new MutationObserver(this.onMutation.bind(this));
+    }
+
+    start()
+    {
+        this.mutationObserver.observe(
+            document,
+            { attributes: false, childList: true, subtree: true }
+        );
+
+        let video = document.querySelector("video");
+        if (video !== null)
+        {
+            this.registerVideo(video);
+        }
+    }
+
+    registerVideo(video)
+    {
+        this.video = video;
+        this.onDetectVideo(video);
+    }
+
+    onMutation(mutations, observer)
+    {
+        for (let mutation of mutations)
+        {
+            if (mutation.type === "childList")
+            {
+                for (let node of mutation.addedNodes)
+                {
+                    if (node.tagName.toLowerCase() === "video")
+                    {
+                        this.registerVideo(node);
+                    }
+                }
+            }
+        }
+    }
 }
+
+let detector = new VideoDetector(bindToVideo);
+detector.start();
+var looper;
