@@ -107,7 +107,7 @@ class VideoDetector
             {
                 for (let node of mutation.addedNodes)
                 {
-                    if (node.tagName.toLowerCase() === "video")
+                    if (node.tagName && node.tagName.toLowerCase() === "video")
                     {
                         this.registerVideo(node);
                     }
